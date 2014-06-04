@@ -29,7 +29,8 @@ func (rootRouter *Router) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	// just have one (closure *middlewareClosure).
 	var closure middlewareClosure
 	closure.Request.Request = r
-	closure.AppResponseWriter.ResponseWriter = rw
+	response, _ := rw.(response)
+	closure.AppResponseWriter.response = response
 	closure.Routers = make([]*Router, 1, rootRouter.maxChildrenDepth)
 	closure.Routers[0] = rootRouter
 	closure.Contexts = make([]reflect.Value, 1, rootRouter.maxChildrenDepth)
